@@ -13,45 +13,54 @@ let reqcount = 10*1000;
 
 type StressTester() =
     let requestCount = ref 0
+    let responseCount = ref 0
     let requestError = ref 0
     let currentRequest = ref 0
     let requestDone = ref 0
 
-    let requestCompleted (cs: TaskCompletionSource<bool>) (http: HttpClient) =
-                ignore <| Interlocked.Decrement currentRequest
-                match Interlocked.Decrement requestDone with
-                | 0 -> http.Dispose()
-                       ignore <| cs.TrySetResult true
-                       printf "Disposed!"
-                | _ -> ()
+    let finishRequest (finish: EventWaitHandle) =
+       ignore <| Interlocked.Decrement currentRequest
+       match Interlocked.Decrement requestDone with
+       | 0 -> ignore <| finish.Set()
+       | _ -> ()
 
-    let rec spamRequest cs (http: HttpClient) (uri: Uri) =
+    let rec spamRequest finish (uri: Uri) =
         async {
-                let! response = Async.AwaitTask <| http.GetAsync uri
+                use http = new HttpClient()
                 ignore <| Interlocked.Increment requestCount
                 ignore <| Interlocked.Increment currentRequest
+                let! response = Async.AwaitTask <| http.GetAsync uri
+                ignore <| Interlocked.Increment responseCount
                 match response.StatusCode with
                 | HttpStatusCode.OK -> let! s = Async.AwaitTask <| response.Content.ReadAsStringAsync()
-                                       requestCompleted cs http
+                                       finishRequest finish
                 | _ -> ignore <| Interlocked.Increment requestError
-                       requestCompleted cs http
+                       finishRequest finish
               }
 
-    member this.RequestedCount with get() = !requestCount
-    member this.ErrorCount with get() = !requestError
+    member this.Progress with get() = Map [
+                                              "request", !requestCount
+                                              "response", !responseCount
+                                              "ongoing", !currentRequest
+                                              "left", !requestDone
+                                              "error", !requestError
+                                          ]
 
     member this.requestGet uri n =
                 requestDone := n
-                let cs = TaskCompletionSource<bool>()
-                let result = Async.AwaitTask <| cs.Task
 
                 async {
-                    let http = new HttpClient()
+                    use finish = new ManualResetEvent false
                     for i = 1 to n do
-                        Async.Start <| spamRequest cs http uri
-                } |> Async.Start
+                        spamRequest finish uri |> Async.Start
+                    ignore <| finish.WaitOne()
+                } |> Async.StartAsTask
 
-                result
+let report (tester: StressTester) =
+    Console.Clear()
+    printfn "%A" DateTime.Now
+    tester.Progress
+    |> Map.iter (fun name value -> printfn "%s = %d" name value)
 
 let startBenchmark uriText =
     let uri = Uri(uriText)
@@ -74,12 +83,12 @@ let startBenchmark uriText =
     let tester = StressTester()
 
     let watch = Stopwatch.StartNew()
-    tester.requestGet countUri reqcount
-    |> Async.RunSynchronously
-    |> ignore
+    let spamTask = tester.requestGet countUri reqcount
+    while not <| spamTask.Wait(1000) do
+        report tester
     watch.Stop()
 
+    report tester
     printfn "Stress test took %d ms for %d requests" watch.ElapsedMilliseconds reqcount
-    printfn "%d request has been performed.  %d errors has been occured" tester.RequestedCount tester.ErrorCount
 
 startBenchmark "http://ruxoz.net:8888/"
