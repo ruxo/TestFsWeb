@@ -5,55 +5,54 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>cb271aac-ee7e-4394-bb93-6c3bbfbdb085</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <RootNamespace>WebModules</RootNamespace>
-    <AssemblyName>WebModules</AssemblyName>
+    <ProjectGuid>4c86ac9f-4ab6-440f-99d6-39901161263a</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>StressTester</RootNamespace>
+    <AssemblyName>StressTester</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFSharpCoreVersion>4.3.1.0</TargetFSharpCoreVersion>
-    <Name>WebModules</Name>
+    <Name>StressTester</Name>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <Tailcalls>false</Tailcalls>
-    <IntermediateOutputPath>..\obj\WebModules\Debug\</IntermediateOutputPath>
-    <OutputPath>bin\</OutputPath>
+    <IntermediateOutputPath>..\obj\StressTester\Debug\</IntermediateOutputPath>
+    <OutputPath>..\bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <WarningLevel>5</WarningLevel>
-    <DocumentationFile>
-    </DocumentationFile>
-    <StartAction>Project</StartAction>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <Tailcalls>true</Tailcalls>
-    <IntermediateOutputPath>..\obj\WebModules\Release\</IntermediateOutputPath>
-    <OutputPath>bin\</OutputPath>
+    <IntermediateOutputPath>..\obj\StressTester\Release\</IntermediateOutputPath>
+    <OutputPath>..\bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <WarningLevel>5</WarningLevel>
-    <DocumentationFile>bin\WebModules.XML</DocumentationFile>
     <PlatformTarget>AnyCPU</PlatformTarget>
+    <DocumentationFile>..\bin\Release\StressTester.XML</DocumentationFile>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
     <Reference Include="FSharp.Core, Version=$(TargetFSharpCoreVersion), Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <Private>True</Private>
     </Reference>
-    <Reference Include="Nancy">
-      <HintPath>..\packages\Nancy.0.23.1\lib\net40\Nancy.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Numerics" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Benchmark.fs" />
-    <Compile Include="MainModule.fs" />
-    <None Include="packages.config" />
+    <Compile Include="HttpRequesters.fs" />
+    <Compile Include="Testers.fs" />
+    <Compile Include="Program.fs" />
+    <None Include="App.config" />
   </ItemGroup>
   <PropertyGroup>
     <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>

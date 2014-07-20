@@ -7,6 +7,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "WebModules", "WebModules\We
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "SelfHost", "SelfHost\SelfHost.fsproj", "{A53A0F2D-55C2-4160-9D2A-DB55EF7542EE}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "StressTester", "StressTester\StressTester.fsproj", "{4C86AC9F-4AB6-440F-99D6-39901161263A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{A53A0F2D-55C2-4160-9D2A-DB55EF7542EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A53A0F2D-55C2-4160-9D2A-DB55EF7542EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A53A0F2D-55C2-4160-9D2A-DB55EF7542EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C86AC9F-4AB6-440F-99D6-39901161263A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C86AC9F-4AB6-440F-99D6-39901161263A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C86AC9F-4AB6-440F-99D6-39901161263A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C86AC9F-4AB6-440F-99D6-39901161263A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
